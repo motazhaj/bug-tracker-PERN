@@ -13,6 +13,15 @@ app.use(cors());
 app.use(express.json()); // allows req.body access
 
 //routes
+app.get("/bugs", async (req, res) => {
+  try {
+    const bugs = await pool.query("SELECT * FROM bugs");
+    res.json(bugs.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.post("/newbug", async (req, res) => {
   try {
     const { name } = req.body;
