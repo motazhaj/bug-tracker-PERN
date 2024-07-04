@@ -58,6 +58,16 @@ app.put("/bugs/:id", async (req, res) => {
   }
 });
 
+app.delete("/bugs/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await pool.query("DELETE FROM bugs WHERE bug_id = $1;", [id]);
+    res.json("Bug was deleted successfully");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.listen(port, () => {
   console.log("Server is starting on port: " + port);
 });
