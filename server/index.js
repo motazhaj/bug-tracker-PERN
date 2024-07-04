@@ -12,6 +12,17 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // allows req.body access
 
+//routes
+app.post("/newbug", async (req, res) => {
+  try {
+    const { name } = req.body;
+    const newBug = await pool.query("INSERT INTO bugs (name, resolved) VALUES ($1, $2) RETURNING *", [name, false]);
+    res.json(newBug.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.listen(port, () => {
   console.log("Server is starting on port: " + port);
 });
