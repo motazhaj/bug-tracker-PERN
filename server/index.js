@@ -34,8 +34,11 @@ app.get("/bugs/:id", async (req, res) => {
 
 app.post("/newbug", async (req, res) => {
   try {
-    const { name } = req.body;
-    const newBug = await pool.query("INSERT INTO bugs (name) VALUES ($1) RETURNING *", [name]);
+    const { title, description } = req.body;
+    const newBug = await pool.query("INSERT INTO bugs (title, description) VALUES ($1,$2) RETURNING *", [
+      title,
+      description,
+    ]);
     res.json(newBug.rows[0]);
   } catch (err) {
     console.error(err.message);
@@ -45,11 +48,11 @@ app.post("/newbug", async (req, res) => {
 app.put("/bugs/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, resolved } = req.body;
+    const { title, description, resolved } = req.body;
 
     const updateBug = await pool.query(
-      "UPDATE bugs SET name = COALESCE($2, name), resolved = COALESCE($3, resolved), updateDate = current_timestamp WHERE bug_id = $1 RETURNING *",
-      [id, name, resolved]
+      "UPDATE bugs SET title = COALESCE($2, title),description = COALESCE($3, description), resolved = COALESCE($4, resolved), updateDate = current_timestamp WHERE bug_id = $1 RETURNING *",
+      [id, title, description, resolved]
     );
 
     res.json(updateBug.rows[0]);
