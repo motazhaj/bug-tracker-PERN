@@ -22,6 +22,16 @@ app.get("/bugs", async (req, res) => {
   }
 });
 
+app.get("/bugs/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const bug = await pool.query("SELECT * FROM bugs WHERE bug_id = $1", [id]);
+    res.json(bug.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.post("/newbug", async (req, res) => {
   try {
     const { name } = req.body;
