@@ -4,7 +4,8 @@ CREATE DATABASE bug_tracker;
 DROP TABLE IF EXISTS bugs;
 CREATE TABLE bugs(
   bug_id SERIAL PRIMARY KEY,
-  name VARCHAR(255),
+  title VARCHAR(255),
+  description TEXT,
   resolved BOOLEAN default false,
   creationDate TIMESTAMP default current_timestamp,
   updateDate TIMESTAMP default null
