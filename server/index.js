@@ -42,6 +42,22 @@ app.post("/newbug", async (req, res) => {
   }
 });
 
+app.put("/bugs/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, resolved } = req.body;
+
+    const updateBug = await pool.query(
+      "UPDATE bugs SET name = COALESCE($2, name), resolved = COALESCE($3, resolved) WHERE bug_id = $1 RETURNING *",
+      [id, name, resolved]
+    );
+
+    res.json(updateBug.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.listen(port, () => {
   console.log("Server is starting on port: " + port);
 });
