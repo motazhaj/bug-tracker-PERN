@@ -5,14 +5,14 @@ import ListBugs from "./components/ListBugs";
 function App() {
   const [newBugTitle, setNewBugTitle] = useState("");
 
-  const onSubmitForm = async (e) => {
+  const onSubmitForm = (e) => {
     e.preventDefault();
     const body = {
       title: newBugTitle,
       description: "",
     };
     try {
-      await fetch("http://localhost:5000/newbug", {
+      fetch("http://localhost:5000/newbug", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
