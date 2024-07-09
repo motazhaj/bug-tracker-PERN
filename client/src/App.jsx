@@ -11,14 +11,16 @@ function App() {
       title: newBugTitle,
       description: "",
     };
-    try {
-      fetch("http://localhost:5000/newbug", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      }).then(setNewBugTitle(""));
-    } catch (err) {
-      console.error(err.message);
+    if (newBugTitle) {
+      try {
+        fetch("http://localhost:5000/newbug", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }).then(setNewBugTitle(""));
+      } catch (err) {
+        console.error(err.message);
+      }
     }
   };
 
@@ -35,6 +37,7 @@ function App() {
             type="text"
             value={newBugTitle}
             onChange={(e) => setNewBugTitle(e.target.value)}
+            required
             placeholder="Add a new bug"
           />
           <button className="bg-[#F29F05] hover:bg-[#e6b968] w-32 h-full px-4" type="submit">
