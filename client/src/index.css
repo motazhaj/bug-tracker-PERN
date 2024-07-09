@@ -3,9 +3,6 @@
 @tailwind utilities;
 
 body {
-  font-family: "Playwrite GB J", cursive;
-  font-optical-sizing: auto;
-  font-style: normal;
-  background-color: #1d594e;
+  background-color: #0b221e;
   color: #f1f1f1;
 }
