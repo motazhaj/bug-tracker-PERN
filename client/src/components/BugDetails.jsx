@@ -1,7 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Resolved from "./Resolved";
 
-export default function BugDetails() {
+export default function BugDetails({ id, setBugs }) {
   const [showBugDetails, setShowBugDetails] = React.useState(false);
+  const [bug, setBug] = useState({});
+
+  useEffect(() => {
+    try {
+      fetch("http://localhost:5000/bugs/" + id)
+        .then((data) => data.json())
+        .then((data) => {
+          setBug(data);
+        });
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  const deleteBug = (id) => {
+    try {
+      fetch("http://localhost:5000/bugs/" + id, {
+        method: "DELETE",
+      });
+
+      setBugs(bugs.filter((bug) => bug.bug_id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <>
       <button className="w-20" type="button" onClick={() => setShowBugDetails(true)}>
@@ -13,9 +40,9 @@ export default function BugDetails() {
             <div className="relative w-auto my-6 mx-auto max-w-4xl bg-white/10 px-8 pt-4 rounded-sm">
               <form className="border-0 rounded-lg shadow-lg relative flex flex-col w-full  outline-none focus:outline-none">
                 <div className="text-start py-8 flex flex-col gap-4">
-                  <input type="text" value={"Some Title"} className="block w-full bg-transparent border-none" />
-                  <input type="text" value={"Some Description"} className="block w-full bg-transparent border-none" />
-                  <button className="bg-green-400 text-black">Resolved</button>
+                  <input type="text" value={bug.title} className="block w-full bg-transparent border-none" />
+                  <input type="text" value={bug.description} className="block w-full bg-transparent border-none" />
+                  <Resolved resolved={bug.resolved} />
                 </div>
 
                 <div className="flex items-center justify-end p-6 border-t border-white/30 border-solid border-blueGray-200 rounded-b">
