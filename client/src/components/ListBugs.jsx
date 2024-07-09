@@ -3,7 +3,6 @@ import dayjs from "dayjs";
 
 const ListBugs = () => {
   const [bugs, setBugs] = useState([]);
-  console.log(bugs);
 
   useEffect(() => {
     try {
@@ -19,32 +18,27 @@ const ListBugs = () => {
 
   return (
     <div>
-      <div className="flex w-full justify-between items-center min-h-12 pl-4">
-        <div className="flex gap-4 h-full w-full">
-          <h2 className="w-2/3">Name</h2>
-          <p>Date</p>
-        </div>
-        <div className="w-1/3 text-end flex justify-end">
-          <p className="w-32 h-full px-4">Edit</p>
-          <p className="w-32 h-full px-4">Delete</p>
-        </div>
-      </div>
-      <ul className="flex flex-col gap-2">
+      <table className="w-full text-start">
+        <thead>
+          <tr>
+            <th className="text-start">Name</th>
+            <th className="text-start">Date</th>
+            <th className="text-start">Edit</th>
+            <th className="text-start">Delete</th>
+          </tr>
+        </thead>
+
         {bugs.map((bug) => (
-          <li className="flex w-full justify-between items-center bg-white/40 rounded-xl min-h-12 pl-4">
-            <div className="flex gap-4 h-full w-full">
-              <h2 className="w-2/3">{bug.title}</h2>
-              <p className="text-sm">{dayjs(bug.creationdate).format("h:mm A DD/MM/YYYY")}</p>
-            </div>
-            <div className="w-1/3 text-end flex justify-end">
-              <button className="text-[#fffbd6] hover:text-[#ffcd61] text-end font-bold w-32 h-full px-4">Edit</button>
-              <button className="text-[#ffd6d6] hover:text-[#F23030] text-end font-bold w-32 h-full px-4">
-                Delete
-              </button>
-            </div>
-          </li>
+          <tbody key={bug.bug_id}>
+            <tr className="bg-white/30 border-y border-white/30">
+              <td>{bug.title}</td>
+              <td>{dayjs(bug.creationdate).format("h:mm A - DD MMM YYYY")}</td>
+              <td className="text-[#f2f2f2] hover:text-[#fff1c2] cursor-pointer">Edit</td>
+              <td className="text-[#f2f2f2] hover:text-[#ffa6a6] cursor-pointer">Delete</td>
+            </tr>
+          </tbody>
         ))}
-      </ul>
+      </table>
     </div>
   );
 };
