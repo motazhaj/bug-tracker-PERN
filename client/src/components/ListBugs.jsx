@@ -16,7 +16,7 @@ const ListBugs = () => {
     } catch (err) {
       console.error(err);
     }
-  }, []);
+  }, [bugs]);
 
   return (
     <div>
@@ -34,14 +34,14 @@ const ListBugs = () => {
         {bugs.map((bug) => (
           <tbody key={bug.bug_id} className="border-y border-white/30">
             <tr>
-              <td>{bug.title}</td>
+              <td className="max-w-[300px] truncate">{bug.title}</td>
               <td>{dayjs(bug.creationdate).format("h:mm A - DD MMM YYYY")}</td>
               <td>
                 <Resolved resolved={bug.resolved} setBugs={setBugs} />
               </td>
               <td>{bug.updatedate ? dayjs(bug.updatedate).format("h:mm A - DD MMM YYYY") : "N/A"}</td>
               <td className="text-end">
-                <BugDetails id={bug.bug_id} />
+                <BugDetails id={bug.bug_id} bug={bug} setBugs={setBugs} />
               </td>
             </tr>
           </tbody>
