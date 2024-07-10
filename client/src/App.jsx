@@ -4,6 +4,7 @@ import ListBugs from "./components/ListBugs";
 
 function App() {
   const [newBugTitle, setNewBugTitle] = useState("");
+  const [bugs, setBugs] = useState([]);
 
   const onSubmitForm = (e) => {
     e.preventDefault();
@@ -17,7 +18,14 @@ function App() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
-        }).then(setNewBugTitle(""));
+        })
+          .then((data) => {
+            setNewBugTitle("");
+            return data.json();
+          })
+          .then((data) => {
+            setBugs([...bugs, data]);
+          });
       } catch (err) {
         console.error(err.message);
       }
@@ -45,7 +53,7 @@ function App() {
           </button>
         </form>
 
-        <ListBugs />
+        <ListBugs bugs={bugs} setBugs={setBugs} />
       </DefaultContainer>
     </>
   );
