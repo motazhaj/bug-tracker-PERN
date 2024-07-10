@@ -20,13 +20,35 @@ export default function BugDetails({ id, bugs, setBugs }) {
     }
   }, []);
 
+  const updateBug = () => {
+    const body = {
+      title: bug.title,
+      description: bug.description,
+      resolved: bug.resolved,
+    };
+
+    try {
+      fetch("http://localhost:5000/bugs/" + id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      })
+        .then((data) => {
+          return data.json();
+        })
+        .then((data) => setBugs([...bugs.filter((bug) => bug.bug_id !== id), data]));
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   const deleteBug = (id) => {
     try {
       fetch("http://localhost:5000/bugs/" + id, {
         method: "DELETE",
-      });
-
-      setBugs(bugs.filter((bug) => bug.bug_id !== id));
+      }).then(setBugs(bugs.filter((bug) => bug.bug_id !== id)));
     } catch (err) {
       console.error(err.message);
     }
@@ -46,23 +68,32 @@ export default function BugDetails({ id, bugs, setBugs }) {
                   <FaRegTrashAlt size={24} />
                 </button>
                 <div className="text-start h-full pb-8 flex flex-col justify-between py-8">
-                  <TextareaAutosize
-                    type="text"
-                    minRows={2}
-                    value={bug.title}
-                    className="block w-full bg-transparent border-none"
-                  />
-                  <TextareaAutosize
-                    type="text"
-                    minRows={2}
-                    placeholder="Add description"
-                    value={bug.description}
-                    className="block w-full bg-transparent border-none"
-                  />
+                  <div className="flex flex-col gap-8">
+                    <TextareaAutosize
+                      type="text"
+                      minRows={2}
+                      value={bug.title}
+                      onChange={(e) => {
+                        setBug({ ...bug, title: e.target.value });
+                      }}
+                      className="block w-full bg-transparent border-none"
+                    />
+                    <TextareaAutosize
+                      type="text"
+                      minRows={2}
+                      placeholder="Add description"
+                      value={bug.description}
+                      onChange={(e) => {
+                        setBug({ ...bug, description: e.target.value });
+                      }}
+                      className="block w-full bg-transparent border-none"
+                    />
+                  </div>
                   <Resolved
                     resolved={bug.resolved}
                     onClick={(e) => {
                       e.preventDefault();
+                      console.log(bug.resolved);
                       setBug({ ...bug, resolved: !bug.resolved });
                     }}
                   />
@@ -79,7 +110,7 @@ export default function BugDetails({ id, bugs, setBugs }) {
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={() => setShowBugDetails(false)}
+                    onClick={updateBug}
                   >
                     Save Changes
                   </button>
