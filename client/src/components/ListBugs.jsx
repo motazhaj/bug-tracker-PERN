@@ -3,9 +3,7 @@ import dayjs from "dayjs";
 import BugDetails from "./BugDetails";
 import Resolved from "./Resolved";
 
-const ListBugs = () => {
-  const [bugs, setBugs] = useState([]);
-
+const ListBugs = ({ bugs, setBugs }) => {
   useEffect(() => {
     try {
       fetch("http://localhost:5000/bugs")
@@ -16,7 +14,9 @@ const ListBugs = () => {
     } catch (err) {
       console.error(err);
     }
-  }, [bugs]);
+  }, []);
+
+  const sortedBugs = bugs.sort((a, b) => (dayjs(a.creationdate).isAfter(b.creationdate) ? -1 : 1));
 
   return (
     <div>
@@ -31,17 +31,17 @@ const ListBugs = () => {
           </tr>
         </thead>
 
-        {bugs.map((bug) => (
+        {sortedBugs.map((bug) => (
           <tbody key={bug.bug_id} className="border-y border-white/30">
             <tr>
-              <td className="max-w-[300px] truncate">{bug.title}</td>
+              <td className="max-w-[300px] truncate">{bug.bug_id + ": " + bug.title}</td>
               <td>{dayjs(bug.creationdate).format("h:mm A - DD MMM YYYY")}</td>
               <td>
                 <Resolved resolved={bug.resolved} setBugs={setBugs} />
               </td>
               <td>{bug.updatedate ? dayjs(bug.updatedate).format("h:mm A - DD MMM YYYY") : "N/A"}</td>
               <td className="text-end">
-                <BugDetails id={bug.bug_id} bug={bug} setBugs={setBugs} />
+                <BugDetails id={bug.bug_id} bugs={bugs} setBugs={setBugs} />
               </td>
             </tr>
           </tbody>
