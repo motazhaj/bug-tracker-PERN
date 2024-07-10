@@ -16,6 +16,25 @@ const ListBugs = ({ bugs, setBugs }) => {
     }
   }, []);
 
+  const resolveBug = (id, resolved) => {
+    try {
+      const body = { resolved: !resolved };
+      fetch("http://localhost:5000/resolvebug/" + id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      })
+        .then((data) => {
+          return data.json();
+        })
+        .then((data) => setBugs([...bugs.filter((bug) => bug.bug_id !== id), data]));
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   const sortedBugs = bugs.sort((a, b) => (dayjs(a.creationdate).isAfter(b.creationdate) ? -1 : 1));
 
   return (
@@ -37,7 +56,11 @@ const ListBugs = ({ bugs, setBugs }) => {
               <td className="max-w-[300px] truncate">{bug.bug_id + ": " + bug.title}</td>
               <td>{dayjs(bug.creationdate).format("h:mm A - DD MMM YYYY")}</td>
               <td>
-                <Resolved resolved={bug.resolved} setBugs={setBugs} />
+                <Resolved
+                  resolved={bug.resolved}
+                  onClick={() => resolveBug(bug.bug_id, bug.resolved)}
+                  setBugs={setBugs}
+                />
               </td>
               <td>{bug.updatedate ? dayjs(bug.updatedate).format("h:mm A - DD MMM YYYY") : "N/A"}</td>
               <td className="text-end">
