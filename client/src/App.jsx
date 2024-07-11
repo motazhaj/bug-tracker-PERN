@@ -35,11 +35,11 @@ function App() {
   return (
     <>
       <DefaultContainer>
-        <h1 className="text-2xl font-bold text-center mt-12">My Bug Tracker</h1>
+        <h1 className="text-3xl font-bold text-center mt-4">======== My Bug Tracker ========</h1>
 
-        <form className="flex h-12 rounded-xl overflow-hidden" onSubmit={onSubmitForm}>
+        <form className="flex h-6 rounded-sm overflow-hidden" onSubmit={onSubmitForm}>
           <input
-            className="w-full h-full px-4 text-black"
+            className="w-full h-full px-4 bg-primary/50 drop-shadow-glow text-secondary placeholder:text-secondary"
             name="newbug"
             id="newbug"
             type="text"
@@ -48,12 +48,13 @@ function App() {
             required
             placeholder="Add a new bug"
           />
-          <button className="bg-[#F29F05] hover:bg-[#e6b968] w-32 h-full px-4" type="submit">
+          <button className="bg-primary hover:bg-primary/40 text-secondary w-32 h-full px-4" type="submit">
             Add Bug
           </button>
         </form>
-
-        <ListBugs bugs={bugs} setBugs={setBugs} />
+        <div className="max-h-[80svh] overflow-y-scroll">
+          <ListBugs bugs={bugs} setBugs={setBugs} />
+        </div>
       </DefaultContainer>
     </>
   );

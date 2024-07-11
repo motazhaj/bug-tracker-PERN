@@ -3,6 +3,24 @@
 @tailwind utilities;
 
 body {
-  background-color: #0b221e;
-  color: #f1f1f1;
+  font-family: "VT323", monospace;
+  font-weight: 400;
+  font-style: normal;
+  background-color: #000000;
+  max-height: 100svh;
+  overflow: auto;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #20372a;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #2dffb7;
 }

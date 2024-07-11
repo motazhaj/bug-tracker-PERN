@@ -56,22 +56,36 @@ export default function BugDetails({ id, bugs, setBugs }) {
 
   return (
     <>
-      <button className="w-10 hover:scale-125 duration-200" type="button" onClick={() => setShowBugDetails(true)}>
+      <button className="w-10 hover:text-white" type="button" onClick={() => setShowBugDetails(true)}>
         <IoIosMore size={24} />
       </button>
       {showBugDetails ? (
         <>
-          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-            <div className="relative my-6 mx-auto w-[1280px] h-[600px] bg-white/10 px-8 pt-4 rounded-md">
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none text-2xl">
+            <div className="relative my-6 mx-auto w-[1280px] h-[1000px] bg-secondary/80 px-8 pt-4 rounded-md">
               <form className="border-0 rounded-lg h-full relative flex flex-col justify-between w-full  outline-none focus:outline-none">
-                <button className="hover:scale-125 duration-200 ml-auto" type="button" onClick={() => deleteBug(id)}>
-                  <FaRegTrashAlt size={24} />
-                </button>
+                <div className="flex gap-10">
+                  <button
+                    className="text-red-500 hover:text-red-50 ml-auto font-bold uppercase"
+                    type="button"
+                    onClick={() => deleteBug(id)}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="text-2xl hover:text-white uppercase"
+                    type="button"
+                    onClick={() => setShowBugDetails(false)}
+                  >
+                    Close
+                  </button>
+                </div>
                 <div className="text-start h-full pb-8 flex flex-col justify-between py-8">
                   <div className="flex flex-col gap-8">
                     <TextareaAutosize
                       type="text"
                       minRows={2}
+                      maxRows={3}
                       value={bug.title}
                       onChange={(e) => {
                         setBug({ ...bug, title: e.target.value });
@@ -81,6 +95,7 @@ export default function BugDetails({ id, bugs, setBugs }) {
                     <TextareaAutosize
                       type="text"
                       minRows={2}
+                      maxRows={18}
                       placeholder="Add description"
                       value={bug.description}
                       onChange={(e) => {
@@ -89,26 +104,22 @@ export default function BugDetails({ id, bugs, setBugs }) {
                       className="block w-full bg-transparent border-none"
                     />
                   </div>
-                  <Resolved
-                    resolved={bug.resolved}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      console.log(bug.resolved);
-                      setBug({ ...bug, resolved: !bug.resolved });
-                    }}
-                  />
+                  <div className="ml-auto mt-4 flex gap-4 items-center pr-8">
+                    <p>Status: </p>
+                    <Resolved
+                      resolved={bug.resolved}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        console.log(bug.resolved);
+                        setBug({ ...bug, resolved: !bug.resolved });
+                      }}
+                    />
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-end p-6 border-t border-white/30 border-solid border-blueGray-200 rounded-b">
                   <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => setShowBugDetails(false)}
-                  >
-                    Close
-                  </button>
-                  <button
-                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className="text-2xl bg-primary text-secondary hover:bg-white font-bold uppercase px-3 py-1 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
                     type="button"
                     onClick={updateBug}
                   >
