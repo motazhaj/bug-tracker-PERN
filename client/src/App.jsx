@@ -9,11 +9,11 @@ function App() {
 
   const onSubmitForm = (e) => {
     e.preventDefault();
-    const body = {
-      title: newBugTitle,
-      description: "",
-    };
     if (newBugTitle) {
+      const body = {
+        title: newBugTitle,
+        description: "",
+      };
       try {
         addNewBugApi(body).then((data) => {
           setNewBugTitle("");
