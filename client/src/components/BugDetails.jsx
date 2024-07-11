@@ -10,14 +10,16 @@ export default function BugDetails({ id, bugs, setBugs }) {
   const [bug, setBug] = useState({});
 
   useEffect(() => {
-    try {
-      fetchBugApi(id).then((data) => {
-        setBug(data);
-      });
-    } catch (err) {
-      console.error(err);
+    if (showBugDetails) {
+      try {
+        fetchBugApi(id).then((data) => {
+          setBug(data);
+        });
+      } catch (err) {
+        console.error(err);
+      }
     }
-  }, []);
+  }, [showBugDetails]);
 
   const updateBug = () => {
     const body = {
