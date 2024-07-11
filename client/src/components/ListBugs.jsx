@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import BugDetails from "./BugDetails";
 import Resolved from "./Resolved";
+import { fetchAllBugsApi, resolveBugApi } from "../utilities/apis";
 
 const ListBugs = ({ bugs, setBugs }) => {
   useEffect(() => {
     try {
-      fetch("http://localhost:5000/bugs")
-        .then((data) => data.json())
-        .then((data) => {
-          setBugs(data);
-        });
+      fetchAllBugsApi().then((data) => {
+        setBugs(data);
+      });
     } catch (err) {
       console.error(err);
     }
@@ -19,17 +18,7 @@ const ListBugs = ({ bugs, setBugs }) => {
   const resolveBug = (id, resolved) => {
     try {
       const body = { resolved: !resolved };
-      fetch("http://localhost:5000/resolvebug/" + id, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      })
-        .then((data) => {
-          return data.json();
-        })
-        .then((data) => setBugs([...bugs.filter((bug) => bug.bug_id !== id), data]));
+      resolveBugApi(id, body).then((data) => setBugs([...bugs.filter((bug) => bug.bug_id !== id), data]));
     } catch (err) {
       console.error(err.message);
     }

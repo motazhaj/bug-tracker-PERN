@@ -3,6 +3,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import { IoIosMore } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
 import Resolved from "./Resolved";
+import { deleteBugApi, fetchBugApi, updateBugApi } from "../utilities/apis";
 
 export default function BugDetails({ id, bugs, setBugs }) {
   const [showBugDetails, setShowBugDetails] = React.useState(false);
@@ -10,11 +11,9 @@ export default function BugDetails({ id, bugs, setBugs }) {
 
   useEffect(() => {
     try {
-      fetch("http://localhost:5000/bugs/" + id)
-        .then((data) => data.json())
-        .then((data) => {
-          setBug(data);
-        });
+      fetchBugApi(id).then((data) => {
+        setBug(data);
+      });
     } catch (err) {
       console.error(err);
     }
@@ -28,17 +27,8 @@ export default function BugDetails({ id, bugs, setBugs }) {
     };
 
     try {
-      fetch("http://localhost:5000/bugs/" + id, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      })
-        .then((data) => {
-          return data.json();
-        })
-        .then((data) => setBugs([...bugs.filter((bug) => bug.bug_id !== id), data]));
+      updateBugApi(id, body).then((data) => setBugs([...bugs.filter((bug) => bug.bug_id !== id), data]));
+      setShowBugDetails(false);
     } catch (err) {
       console.error(err.message);
     }
@@ -46,9 +36,7 @@ export default function BugDetails({ id, bugs, setBugs }) {
 
   const deleteBug = (id) => {
     try {
-      fetch("http://localhost:5000/bugs/" + id, {
-        method: "DELETE",
-      }).then(setBugs(bugs.filter((bug) => bug.bug_id !== id)));
+      deleteBugApi(id).then(setBugs(bugs.filter((bug) => bug.bug_id !== id)));
     } catch (err) {
       console.error(err.message);
     }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DefaultContainer from "./components/layout/DefaultContainer";
 import ListBugs from "./components/ListBugs";
+import { addNewBugApi } from "./utilities/apis";
 
 function App() {
   const [newBugTitle, setNewBugTitle] = useState("");
@@ -14,18 +15,10 @@ function App() {
     };
     if (newBugTitle) {
       try {
-        fetch("http://localhost:5000/newbug", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        })
-          .then((data) => {
-            setNewBugTitle("");
-            return data.json();
-          })
-          .then((data) => {
-            setBugs([...bugs, data]);
-          });
+        addNewBugApi(body).then((data) => {
+          setNewBugTitle("");
+          setBugs([...bugs, data]);
+        });
       } catch (err) {
         console.error(err.message);
       }
